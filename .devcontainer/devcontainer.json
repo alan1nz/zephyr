@@ -6,5 +6,13 @@
             "ESP_IDF_VERSION": "v5.3.1",
             "ESP_IDF_PATH": "/opt/esp-idf"
         }
-    }
+    },
+    "runArgs": [
+        "--device-cgroup-rule=c 189:* rmw",
+        "--device-cgroup-rule=c 188:* rmw",
+        "--device-cgroup-rule=c 166:* rmw"
+    ],
+    "mounts": [
+        "source=/dev,target=/dev,type=bind"
+    ]
 }

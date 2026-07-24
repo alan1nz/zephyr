@@ -50,5 +50,9 @@ RUN <<EOF
 	rm -rf ${ESP_IDF_PATH}/.git
 EOF
 
+
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends \
+	usbutils
 # Set build environment variables
 ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
