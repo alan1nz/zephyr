@@ -1,0 +1,54 @@
+# CI Image (ci)
+#
+# This image contains everything in the `ci-base` image and the Zephyr SDK.
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE:-zephyrprojectrtos/ci-base:latest}
+
+ARG USERNAME=user
+ARG WGET_ARGS="-q --show-progress --progress=bar:force:noscroll"
+
+ARG ZSDK_VERSION=1.0.1
+ENV ZSDK_VERSION=$ZSDK_VERSION
+
+# Install Zephyr SDK
+RUN <<EOF
+	mkdir -p /opt/toolchains
+	cd /opt/toolchains
+	wget ${WGET_ARGS} https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${ZSDK_VERSION}/zephyr-sdk-${ZSDK_VERSION}_linux-${HOSTTYPE}_gnu.tar.xz
+	tar xf zephyr-sdk-${ZSDK_VERSION}_linux-${HOSTTYPE}_gnu.tar.xz
+	zephyr-sdk-${ZSDK_VERSION}/setup.sh -l -t all -h -c
+	rm zephyr-sdk-${ZSDK_VERSION}_linux-${HOSTTYPE}_gnu.tar.xz
+EOF
+
+# Run the Zephyr SDK setup script as 'user' in order to ensure that the
+# `Zephyr-sdk` CMake package is located in the package registry under the
+# user's home directory.
+USER $USERNAME
+
+RUN <<EOF
+	sudo -E -- bash -c '
+	/opt/toolchains/zephyr-sdk-${ZSDK_VERSION}/setup.sh -c &&
+	chown -R $USERNAME:$USERNAME /home/$USERNAME/.cmake
+	'
+EOF
+
+USER root
+
+
+ARG ESP_IDF_VERSION=v5.2.2
+ENV ESP_IDF_VERSION=ESP_IDF_VERSION
+ENV ESP_IDF_PATH=/opt/esp-idf
+
+RUN <<EOF
+	set -e
+	git clone --depth 1 --branch v6.0.2 \
+		https://github.com/espressif/esp-idf.git ${ESP_IDF_PATH}
+	cd ${ESP_IDF_PATH}
+	PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+		./install.sh all
+	rm -rf ${ESP_IDF_PATH}/.git
+EOF
+
+# Set build environment variables
+ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
