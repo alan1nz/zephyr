@@ -5,7 +5,8 @@ int main()
 {
 	while (1)
 	{
-		printk("hello there\r\n");
+
+		printk("hello there gay boi\r\n");
 		k_msleep(1);
 	}
 }

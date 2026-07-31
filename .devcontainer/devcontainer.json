@@ -1,12 +1,12 @@
 {
-    // "image": "ghcr.io/alan1nz/zephyr-devcontainer:latest"
-    "build": {
-        "dockerfile": "Dockerfile",
-        "args": {
-            "ESP_IDF_VERSION": "v5.3.1",
-            "ESP_IDF_PATH": "/opt/esp-idf"
-        }
-    },
+    "image": "ghcr.io/alan1nz/zephyr-devcontainer:latest",
+    // "build": {
+    //     "dockerfile": "Dockerfile",
+    //     "args": {
+    //         "ESP_IDF_VERSION": "v5.3.1",
+    //         "ESP_IDF_PATH": "/opt/esp-idf"
+    //     }
+    // },
     "customizations": {
         "vscode": {
             "extensions": [

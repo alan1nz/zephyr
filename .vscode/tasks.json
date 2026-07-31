@@ -15,7 +15,7 @@
                 "build",
                 "--p",
                 "-b",
-                "esp32c3_devkitc",
+                "esp32s3_devkitc/esp32s3/procpu",
                 "app"
             ],
             "options": {
