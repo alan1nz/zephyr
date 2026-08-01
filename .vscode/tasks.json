@@ -6,11 +6,11 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "west",
             "icon": {
                 "id": "coffee",
                 "color": "terminal.ansiGreen"
             },
+            "command": "west",
             "args": [
                 "build",
                 "--p",
@@ -19,7 +19,7 @@
                 "app"
             ],
             "options": {
-                "cwd": "/workspaces/zephyr/stepper_project/"
+                "cwd": "${workspaceFolder}/stepper_project/"
             },
             "problemMatcher": []
         }
