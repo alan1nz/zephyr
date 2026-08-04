@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/pengcao/Documents/code/zephyr_stepper/stepper_project/app/src",
+      "program": "/Users/pengcao/Documents/code/zephyr_stepper/stepper_project/app/src/build/Debug/outDebug"
+    },
+    {
+      "name": "L432 Debug",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "executable": "stepper_project/build/zephyr/zephyr.elf",
+      "servertype": "stlink",
+      "stm32cubeprogrammer": "/opt/ST/STM32CubeCLT_1.18.0/STM32CubeProgrammer/bin",
+      "postLaunchCommands": [
+        "set substitute-path /workspaces/zephyr_stepper ${workspaceFolder}"
+      ],
+      "runToEntryPoint": "main",
+      "svdFile": "stepper_project/boards/svd/STM32L432.svd"
+    }
+  ]
+}

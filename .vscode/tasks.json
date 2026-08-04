@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build",
+            "label": "Build ESP32S3",
             "type": "shell",
             "icon": {
                 "id": "coffee",
@@ -22,6 +22,42 @@
                 "cwd": "${workspaceFolder}/stepper_project/"
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Build L432",
+            "type": "shell",
+            "icon": {
+                "id": "coffee",
+                "color": "terminal.ansiGreen"
+            },
+            "command": "west",
+            "args": [
+                "build",
+                "--p",
+                "-b",
+                "nucleo_l432kc",
+                "app"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/stepper_project/"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "West Flash",
+            "command": "${workspaceFolder}/.venv/bin/west",
+            "icon": {
+                "id": "arrow-circle-right",
+                "color": "terminal.ansiGreen"
+            },
+            "args": [
+                "flash",
+                "--no-rebuild"
+            ],
+            "problemMatcher":[],
+            "options": {
+                "cwd": "${workspaceFolder}/stepper_project/"
+            },
         }
     ]
 }

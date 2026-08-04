@@ -1,0 +1,17 @@
+// Project tasks configuration. See https://zed.dev/docs/tasks for documentation.
+//
+// Example:
+[
+    {
+        "label": "West Build L432",
+        "command": "west",
+        "args": [
+            "build",
+            "--p",
+            "-b",
+            "nucleo_l432kc",
+            "app"
+        ],
+        "cwd": "$ZED_WORKTREE_ROOT/stepper_project"
+    }
+]
