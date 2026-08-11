@@ -1,0 +1,23 @@
+description: |
+  A generic binding for controlling a LED via GPIO
+  
+  Example definition in device tree:
+  
+  my-led{
+    compatible = "my-led"
+
+  }
+
+
+compatible: "my-led"
+include: base.yaml
+
+properties:
+  gpios:
+    type: phandle-array
+    required: true
+    description: gpio controlled led
+
+  blink-period-ms:
+    type: int
+    description: Blinking period in milliseconds
