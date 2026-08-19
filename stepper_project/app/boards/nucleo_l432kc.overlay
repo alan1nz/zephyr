@@ -1,8 +1,9 @@
 
 /{
-    my_led1: my_led{
+    my_led1: my-led{
         compatible="my-led";
-        gpios = <&gpioa 2 GPIO_ACTIVE_HIGH>;
-        blink-period-ms = <2000>;
+        gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
+        blink-period-ms = <1000>;
+        status = "okay";
     };
 };

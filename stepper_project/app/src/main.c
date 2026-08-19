@@ -3,28 +3,19 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
+#include <app/drivers/myled.h>
 
-// #define LED DT_ALIAS(led0)
-// static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED, gpios);
+#define MY_LED DT_NODELABEL(my_led1)
+static const struct device *led = DEVICE_DT_GET(MY_LED);
+// static const struct ;
 
 int main()
 {
-	// if (!gpio_is_ready_dt(&led))
-	// {
-	// 	printk("LED is not ready");
-	// 	return 1;
-	// }
-
-	// if (gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE) != 0)
-	// {
-	// 	printk("LED failed to configure");
-	// 	return 1;
-	// }
 
 	while (1)
 	{
-		printk("hello there gay boi\r\n");
-		// gpio_pin_toggle_dt(&led);
-		k_msleep(5000);
+		// printk("hello there gay boi\r\n");
+		run_blink(led);
+		// k_msleep(20);
 	}
 }
