@@ -3,7 +3,7 @@
     my_led1: my-led{
         compatible="my-led";
         gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
-        blink-period-ms = <1000>;
+        blink-period-ms = <50>;
         status = "okay";
     };
 };

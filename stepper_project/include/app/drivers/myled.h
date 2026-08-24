@@ -1,3 +1,6 @@
+#ifndef MY_LED_H
+#define MY_LED_H
+
 #include <zephyr/device.h>
 #include <zephyr/toolchain.h>
 #include <zephyr/drivers/gpio.h>
@@ -19,4 +22,6 @@ struct my_led_apis
     void (*blink)(const struct device *dev);
 };
 
-void run_blink(const struct device *dev);
+void run_blink();
+
+#endif
