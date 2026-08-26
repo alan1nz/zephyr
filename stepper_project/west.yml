@@ -9,6 +9,9 @@ manifest:
     - name: zephyrproject-rtos
       url-base: https://github.com/zephyrproject-rtos
 
+    - name: googletest
+      url-base: https://github.com/google
+
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
@@ -21,3 +24,10 @@ manifest:
           - hal_nordic # required by the custom_plank board (Nordic based)
           - hal_stm32  # required by the nucleo_f302r8 board (STM32 based)
           - hal_espressif
+
+    - name: googletest
+      remote: googletest
+      revision: main
+      path: modules/thirdparty/gtest
+
+
