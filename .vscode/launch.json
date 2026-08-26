@@ -22,6 +22,14 @@
       ],
       "runToEntryPoint": "main",
       "svdFile": "stepper_project/boards/svd/STM32L432.svd"
+    },
+    {
+      "name": "Debug ZTest",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/stepper_project/build/zephyr/zephyr.exe",
+      "preLaunchTask": "West ZTest"
     }
   ]
 }

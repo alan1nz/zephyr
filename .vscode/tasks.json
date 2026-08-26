@@ -58,6 +58,19 @@
             "options": {
                 "cwd": "${workspaceFolder}/stepper_project/"
             },
-        }
+        },
+        {
+            "label": "West ZTest",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/stepper_project/"
+            },
+            "command": "west build -p auto -b native_sim/native/64 tests/drivers/myled -- -DEXTRA_CONF_FILE=prj.conf",
+            "icon": {
+                "id": "coffee",
+                "color": "terminal.ansiYellow"
+            },
+            "problemMatcher": []
+        },
     ]
 }
