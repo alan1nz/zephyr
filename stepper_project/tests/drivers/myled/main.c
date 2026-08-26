@@ -1,63 +1,61 @@
-#include <limits.h>
 #include <zephyr/ztest.h>
+#include <zephyr/fff.h>
 #include <zephyr/drivers/gpio.h>
 #include <myled_core.h>
 
-/* 1. Mock GPIO pin configuration function returning an error */
-static int mock_gpio_pin_configure_fail(const struct device *port, gpio_pin_t pin, gpio_flags_t flags)
-{
-    ARG_UNUSED(port);
-    ARG_UNUSED(pin);
-    ARG_UNUSED(flags);
-    return -EIO;
-}
+DEFINE_FFF_GLOBALS;
 
-/* 2. Register mock API in the official GPIO linker section */
-STRUCT_SECTION_ITERABLE(gpio_driver_api, mock_gpio_api) = {
-    .pin_configure = mock_gpio_pin_configure_fail,
+/* 1. Declare FFF fake function for pin_configure */
+FAKE_VALUE_FUNC(int, mock_gpio_pin_configure, const struct device *, gpio_pin_t, gpio_flags_t);
+
+/* 2. Register mock API table in Zephyr's API section */
+STRUCT_SECTION_ITERABLE(gpio_driver_api, fff_gpio_api) = {
+    .pin_configure = mock_gpio_pin_configure,
 };
 
-/* 3. Mock GPIO device state, dummy config, and driver data */
-static struct device_state mock_gpio_state = {
-    .initialized = true,
-};
+/* 3. Extract device and config from Devicetree overlay */
+static const struct gpio_dt_spec test_gpio = GPIO_DT_SPEC_GET(DT_NODELABEL(test_led), gpios);
 
-static const struct gpio_driver_config mock_gpio_config = {
-    .port_pin_mask = BIT_MASK(32),
-};
-
-static struct gpio_driver_data mock_gpio_data;
-
-/* 4. Mock GPIO controller device structure */
-static const struct device mock_gpio_port = {
-    .name = "MOCK_GPIO_PORT",
-    .api = &mock_gpio_api,
-    .state = &mock_gpio_state,
-    .config = &mock_gpio_config,
-    .data = &mock_gpio_data,
-};
-
-/* 5. Driver test configuration and target device */
-static struct myled_config test_config = {
-    .gpio_spec = {
-        .port = &mock_gpio_port,
-        .pin = 1,
-        .dt_flags = GPIO_OUTPUT_ACTIVE,
-    },
+static const struct myled_config test_config = {
+    .gpio_spec = test_gpio,
     .blink_period = 10,
 };
 
-static const struct device test_dev = {
+static struct device test_dev = {
     .name = "MYLED_TEST_DEV",
     .config = &test_config,
     .api = NULL,
 };
 
-/* 6. Test logic */
-ZTEST(myled_suite, test_init_gpio_configure_failure)
+static void test_setup(void *fixture)
 {
-    int ret = myled_core_init(&test_dev);
-    zassert_equal(ret, 1, "Expected init to return 1 when gpio_pin_configure_dt fails");
+    RESET_FAKE(mock_gpio_pin_configure);
+    FFF_RESET_HISTORY();
+
+    /* Override DT device API pointer to point to our FFF mock API */
+    ((struct device *)test_gpio.port)->api = &fff_gpio_api;
 }
 
-ZTEST_SUITE(myled_suite, NULL, NULL, NULL, NULL, NULL);
+ZTEST(myled_suite, test_init_configure_failure)
+{
+    /* Tell FFF to return an error */
+    mock_gpio_pin_configure_fake.return_val = -EIO;
+
+    int ret = myled_core_init(&test_dev);
+
+    zassert_equal(ret, 1, "Expected init to fail when configure fails");
+    zassert_equal(mock_gpio_pin_configure_fake.call_count, 1, "Expected 1 call to pin_configure");
+}
+
+ZTEST(myled_suite, test_init_configure_success)
+{
+    /* Tell FFF to return fail */
+    mock_gpio_pin_configure_fake.return_val = 1;
+
+    int ret = myled_core_init(&test_dev);
+
+    zassert_equal(ret, 0, "Expected init to succeed");
+    zassert_equal(mock_gpio_pin_configure_fake.call_count, 1, "Expected 1 call to pin_configure");
+}
+
+ZTEST_SUITE(myled_suite, NULL, NULL, test_setup, NULL, NULL);
