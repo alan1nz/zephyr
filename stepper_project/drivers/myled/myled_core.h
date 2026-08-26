@@ -7,6 +7,5 @@
 int myled_core_init(const struct device *device);
 void myled_core_run_blink();
 int myled_core_set_led_period();
-// void myled_core_run_blink_imp();
 
 #endif
