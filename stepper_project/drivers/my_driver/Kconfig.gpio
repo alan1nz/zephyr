@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config MY_DRIVER_GPIO
+	bool "Gpio my_driver driver"
+	default y
+	depends on DT_HAS_MY_DRIVER_GPIO_ENABLED
+	help
+	  Enable this option to use the gpio my_driver driver.

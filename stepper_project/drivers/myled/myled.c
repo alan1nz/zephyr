@@ -26,7 +26,7 @@ void run_blink()
                           &myled_data_##inst,                \
                           &myled_config_##inst,              \
                           POST_KERNEL,                       \
-                          5,                                 \
+                          50,                                \
                           &apis);
 
 DT_INST_FOREACH_STATUS_OKAY(MY_LED_DEFINE)

@@ -1,0 +1,197 @@
+/*
+ * Copyright (c) 2024
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <st/f1/stm32f103Xc.dtsi>
+#include <st/f1/stm32f103r(c-d-e)tx-pinctrl.dtsi>
+
+/ {
+	model = "BIGTREETECH SKR Mini E3 V1.2";
+	compatible = "bigtreetech,skr-mini-e3-v1-2";
+
+	chosen {
+		zephyr,console = &usart2;
+		zephyr,shell-uart = &usart2;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+	};
+
+	aliases {
+		watchdog0 = &iwdg;
+		die-temp0 = &die_temp;
+		stepper-x-driver = &tmc2209_x;
+		stepper-x-ctrl = &stepper_x;
+		stepper-y-driver = &tmc2209_y;
+		stepper-y-ctrl = &stepper_y;
+		stepper-z-driver = &tmc2209_z;
+		stepper-z-ctrl = &stepper_z;
+		stepper-e0-driver = &tmc2209_e0;
+		stepper-e0-ctrl = &stepper_e0;
+	};
+
+	/* X/Y/Z/E0-STOP and BLTouch probe input */
+	gpio_keys {
+		compatible = "gpio-keys";
+
+		x_stop: x-stop {
+			label = "X-STOP";
+			gpios = <&gpioc 0 GPIO_ACTIVE_LOW>;
+		};
+
+		y_stop: y-stop {
+			label = "Y-STOP";
+			gpios = <&gpioc 1 GPIO_ACTIVE_LOW>;
+		};
+
+		z_stop: z-stop {
+			label = "Z-STOP";
+			gpios = <&gpioc 2 GPIO_ACTIVE_LOW>;
+		};
+
+		z_probe: z-probe {
+			label = "PROBE";
+			gpios = <&gpioc 14 GPIO_ACTIVE_LOW>;
+		};
+
+		e0_stop: e0-stop {
+			label = "E0-STOP";
+			gpios = <&gpioc 15 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	/* Onboard TMC2209 drivers, enable pins only (microstepping is set over UART) */
+	tmc2209_x: tmc2209-x {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpiob 14 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_x: stepper-x {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpiob 13 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_x>;
+	};
+
+	tmc2209_y: tmc2209-y {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpiob 11 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_y: stepper-y {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpiob 10 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_y>;
+	};
+
+	tmc2209_z: tmc2209-z {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpiob 1 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_z: stepper-z {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpiob 0 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpioc 5 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_z>;
+	};
+
+	tmc2209_e0: tmc2209-e0 {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpiod 2 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_e0: stepper-e0 {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpiob 4 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_e0>;
+	};
+};
+
+&clk_lsi {
+	status = "okay";
+};
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(8)>;
+	status = "okay";
+};
+
+&pll {
+	mul = <9>;
+	clocks = <&clk_hse>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll>;
+	clock-frequency = <DT_FREQ_M(72)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <2>;
+	apb2-prescaler = <1>;
+};
+
+/* TFT/debug header (PA2/PA3) */
+&usart2 {
+	pinctrl-0 = <&usart2_tx_pa2 &usart2_rx_pa3>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	status = "okay";
+};
+
+/* Onboard micro-SD card slot */
+&spi1 {
+	pinctrl-0 = <&spi1_sck_master_pa5 &spi1_miso_master_pa6 &spi1_mosi_master_pa7>;
+	pinctrl-names = "default";
+	cs-gpios = <&gpioa 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+	status = "okay";
+};
+
+/* Hotend thermistor (TH0 / PA0) and heated-bed thermistor (TB0 / PC3) */
+&adc1 {
+	pinctrl-0 = <&adc1_in0_pa0 &adc1_in13_pc3>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+/* Part-cooling fan output */
+&timers1 {
+	st,prescaler = <99>;
+	status = "okay";
+
+	fan0_pwm: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim1_ch1_pwm_out_pa8>;
+		pinctrl-names = "default";
+	};
+};
+
+/* Hotend (CH3/PC8) and heated-bed (CH4/PC9) heater outputs, full remap */
+&timers3 {
+	st,prescaler = <99>;
+	status = "okay";
+
+	heater_pwm: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim3_ch3_remap3_pwm_out_pc8 &tim3_ch4_remap3_pwm_out_pc9>;
+		pinctrl-names = "default";
+	};
+};
+
+&iwdg {
+	status = "okay";
+};
+
+&rtc {
+	clocks = <&rcc STM32_CLOCK(APB1, 28)>,
+		 <&rcc STM32_SRC_LSI RTC_SEL(2)>;
+	status = "okay";
+};
+
+&die_temp {
+	status = "okay";
+};

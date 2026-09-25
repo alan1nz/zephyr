@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_BTT_SKR_MINI_E3_V1_2
+	select SOC_STM32F103XE

@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  A binding for the my_driver implementation of the my_driver driver class.
+
+  Example definition in devicetree:
+
+    my-driver-my-driver {
+        compatible = "my-driver-my-driver";
+    };
+
+compatible: "my-driver-my-driver"
+
+include: base.yaml
+
+properties:
+  # TODO: add implementation specific properties here.

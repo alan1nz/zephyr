@@ -1,0 +1,18 @@
+identifier: btt_skr_mini_e3_v1_2
+name: BIGTREETECH SKR Mini E3 V1.2
+type: mcu
+arch: arm
+ram: 48
+flash: 256
+toolchain:
+  - zephyr
+  - gnuarmemb
+supported:
+  - gpio
+  - spi
+  - uart
+  - adc
+  - watchdog
+  - pwm
+  - counter
+vendor: bigtreetech

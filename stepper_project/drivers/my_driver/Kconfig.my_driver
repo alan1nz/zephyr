@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config MY_DRIVER_MY_DRIVER
+	bool "MyDriver my_driver driver"
+	default y
+	depends on DT_HAS_MY_DRIVER_MY_DRIVER_ENABLED
+	help
+	  Enable this option to use the my_driver my_driver driver.

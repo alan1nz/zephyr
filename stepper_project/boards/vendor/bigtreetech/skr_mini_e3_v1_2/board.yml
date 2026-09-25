@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+
+board:
+  name: btt_skr_mini_e3_v1_2
+  full_name: BIGTREETECH SKR Mini E3 V1.2
+  vendor: bigtreetech
+  socs:
+    - name: stm32f103xe

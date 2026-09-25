@@ -13,12 +13,13 @@ STRUCT_SECTION_ITERABLE(gpio_driver_api, fff_gpio_api) = {
     .pin_configure = mock_gpio_pin_configure,
 };
 
-/* 3. Extract device and config from Devicetree overlay */
-static const struct gpio_dt_spec test_gpio = GPIO_DT_SPEC_GET(DT_NODELABEL(test_led), gpios);
+/* Extract the DT node by label */
+#define MY_LED_NODE DT_NODELABEL(my_led1)
 
+/* 2. Extract driver config parameters from DTS */
 static const struct myled_config test_config = {
-    .gpio_spec = test_gpio,
-    .blink_period = 10,
+    .gpio_spec = GPIO_DT_SPEC_GET(MY_LED_NODE, gpios),
+    .blink_period = DT_PROP(MY_LED_NODE, blink_period_ms),
 };
 
 static struct device test_dev = {
@@ -32,8 +33,9 @@ static void test_setup(void *fixture)
     RESET_FAKE(mock_gpio_pin_configure);
     FFF_RESET_HISTORY();
 
-    /* Override DT device API pointer to point to our FFF mock API */
-    ((struct device *)test_gpio.port)->api = &fff_gpio_api;
+    /* Retrieve the port directly from test_config's embedded gpio_spec */
+    const struct myled_config *cfg = test_dev.config;
+    ((struct device *)cfg->gpio_spec.port)->api = &fff_gpio_api;
 }
 
 ZTEST(myled_suite, test_init_configure_failure)
@@ -50,7 +52,7 @@ ZTEST(myled_suite, test_init_configure_failure)
 ZTEST(myled_suite, test_init_configure_success)
 {
     /* Tell FFF to return fail */
-    mock_gpio_pin_configure_fake.return_val = 1;
+    mock_gpio_pin_configure_fake.return_val = 0;
 
     int ret = myled_core_init(&test_dev);
 

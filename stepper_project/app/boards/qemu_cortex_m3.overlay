@@ -1,0 +1,71 @@
+/*
+ * QEMU (qemu_cortex_m3 / TI LM3S6965) stand-in for the BTT SKR Mini E3 V1.2
+ * stepper wiring, using the board's real onboard GPIO controllers in place
+ * of the STM32 GPIO ports (QEMU has no STM32F103 machine model).
+ *
+ * X/Y/Z/E0 each get a dedicated GPIO port so the layout mirrors
+ * btt_skr_mini_e3_v1_2.dts: pin 0 = STEP, pin 1 = DIR, pin 2 = EN.
+ */
+
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/ {
+	aliases {
+		stepper-x-driver = &tmc2209_x;
+		stepper-x-ctrl = &stepper_x;
+		stepper-y-driver = &tmc2209_y;
+		stepper-y-ctrl = &stepper_y;
+		stepper-z-driver = &tmc2209_z;
+		stepper-z-ctrl = &stepper_z;
+		stepper-e0-driver = &tmc2209_e0;
+		stepper-e0-ctrl = &stepper_e0;
+	};
+
+	tmc2209_x: tmc2209-x {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_x: stepper0: stepper-x {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_x>;
+	};
+
+	tmc2209_y: tmc2209-y {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_y: stepper-y {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_y>;
+	};
+
+	tmc2209_z: tmc2209-z {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpio2 2 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_z: stepper-z {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpio2 0 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_z>;
+	};
+
+	tmc2209_e0: tmc2209-e0 {
+		compatible = "adi,tmc2209";
+		en-gpios = <&gpio3 2 GPIO_ACTIVE_LOW>;
+	};
+
+	stepper_e0: stepper-e0 {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&gpio3 0 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&gpio3 1 GPIO_ACTIVE_HIGH>;
+		stepper-driver = <&tmc2209_e0>;
+	};
+};

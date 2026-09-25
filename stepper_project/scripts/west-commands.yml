@@ -4,3 +4,8 @@ west-commands:
       - name: example-west-command
         class: ExampleWestCommand
         help: an example west extension command
+  - file: scripts/gen_driver_class.py
+    commands:
+      - name: gen-driver-class
+        class: GenDriverClass
+        help: scaffold a new out-of-tree custom driver class

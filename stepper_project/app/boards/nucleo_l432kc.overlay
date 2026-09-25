@@ -1,9 +1,44 @@
 
 /{
-    my_led1: my-led{
-        compatible="my-led";
+    my_led1: my-led {
+        compatible = "my-led";
         gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
         blink-period-ms = <50>;
         status = "okay";
     };
+
+    tmc2209: tmc2209 {
+        compatible = "adi,tmc2209";
+        en-gpios = <&gpiob 0 GPIO_ACTIVE_HIGH>;
+        m0-gpios = <&gpiob 1 GPIO_ACTIVE_HIGH>;
+        m1-gpios = <&gpioa 7 GPIO_ACTIVE_HIGH>;
+        status = "okay";
+    };
+
+    stepper0: motion-controller {
+        compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+        step-gpios = <&gpioa 10 GPIO_ACTIVE_HIGH>;
+        dir-gpios = <&gpioa 11 GPIO_ACTIVE_HIGH>;
+        counter = <&counter1>;
+
+        // stepper-driver = <&tmc2209>;
+        status = "okay";
+    };
 };
+
+/* 1. Configure the STM32 Hardware Timer */
+&timers2 {
+    status = "okay";
+    st,prescaler = <1>;
+
+    /* Child node providing the counter API */
+    counter1: counter {
+        compatible = "st,stm32-counter";
+        status = "okay";
+    };
+};
+
+&pwm2 {
+    status = "disabled";
+};
+

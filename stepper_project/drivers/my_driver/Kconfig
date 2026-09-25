@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig MY_DRIVER
+	bool "MyDriver device drivers"
+	help
+	  This option enables the my_driver custom driver class.
+
+if MY_DRIVER
+
+config MY_DRIVER_INIT_PRIORITY
+	int "MyDriver device drivers init priority"
+	default KERNEL_INIT_PRIORITY_DEVICE
+	help
+	  MyDriver device drivers init priority.
+
+module = MY_DRIVER
+module-str = my_driver
+source "subsys/logging/Kconfig.template.log_config"
+
+rsource "Kconfig.my_driver"
+
+endif # MY_DRIVER

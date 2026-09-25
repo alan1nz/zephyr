@@ -5,4 +5,5 @@ menu "Drivers"
 rsource "blink/Kconfig"
 rsource "sensor/Kconfig"
 rsource "myled/Kconfig"
+rsource "my_driver/Kconfig"
 endmenu
