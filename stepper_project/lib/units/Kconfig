@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config UNITS
+	bool "Support for the units literals library"
+	select CPP
+	help
+	  This option enables the 'units' library, providing strongly-typed
+	  physical quantities (Volts, Celsius, Millimeters, ...) via C++
+	  user-defined literals, e.g. `48.0_v`, `23_celsius`.
