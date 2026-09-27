@@ -18,6 +18,11 @@ target_link_libraries(Catch2 PRIVATE zephyr_interface)
 
 target_sources(app PRIVATE src/main.cpp)
 
+target_compile_options(app PRIVATE
+    -Wno-error=unused-const-variable
+    -Wno-error=unused-variable
+)
+
 # Link against Catch2, not Catch2WithMain: we supply our own main() so it can
 # explicitly exit the process once the session finishes (see main.cpp).
 target_link_libraries(app PRIVATE Catch2::Catch2)
