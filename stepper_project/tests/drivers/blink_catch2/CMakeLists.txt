@@ -10,7 +10,7 @@ set(CATCH_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(CATCH_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
 set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../../modules/thirdparty/catch2 ${CMAKE_BINARY_DIR}/catch2)
+add_subdirectory(${WEST_TOPDIR}/modules/thirdparty/catch2 ${CMAKE_BINARY_DIR}/catch2)
 
 # Catch2 doesn't go through zephyr_library(), so it won't automatically pick
 # up Zephyr's toolchain/target flags (cross-compiler, arch flags, defines).
