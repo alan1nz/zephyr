@@ -6,6 +6,9 @@
 #include <app/drivers/myled.h>
 #include <zephyr/drivers/stepper/stepper.h>
 #include <zephyr/drivers/stepper/stepper_ctrl.h>
+#include <app/lib/units.hpp>
+
+using namespace units::literals;
 
 static const struct device *stepper_dev = DEVICE_DT_GET(DT_NODELABEL(stepper0));
 
@@ -20,6 +23,9 @@ int main()
     }
 
 
+    auto v = 48.0;
+    auto t = 1_a;
+    auto a = v - 1.0_v;
 
     // /* Enable driver and set motion bounds */
     stepper_enable(stepper_dev);
@@ -39,8 +45,12 @@ int main()
 	while (1)
 	{
         printk("gay\r\n");
+        printk("v = %f\n", v.value());
+        printk("a = %f\n", a.value());
         k_msleep(1000);
 
+
+        
 		// run_blink();
 	}
 }
