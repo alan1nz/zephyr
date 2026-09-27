@@ -9,6 +9,10 @@
 #include <zephyr/device.h>
 #include <zephyr/toolchain.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @defgroup drivers_blink Blink drivers
  * @ingroup drivers
@@ -104,6 +108,10 @@ static inline int blink_off(const struct device *dev)
 }
 
 #include <zephyr/syscalls/blink.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 

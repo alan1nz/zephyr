@@ -1,0 +1,4 @@
+tests:
+  drivers.blink.unit_testing:
+    tags: unit_test drivers
+    platform_allow: unit_testing
