@@ -12,6 +12,9 @@ manifest:
     - name: googletest
       url-base: https://github.com/google
 
+    - name: catchorg
+      url-base: https://github.com/catchorg
+
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
@@ -29,5 +32,10 @@ manifest:
       remote: googletest
       revision: main
       path: modules/thirdparty/gtest
+
+    - name: Catch2
+      remote: catchorg
+      revision: v3.7.1
+      path: modules/thirdparty/catch2
 
 
