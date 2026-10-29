@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+menuconfig GRBL_GCODE
+	bool "Grbl g-code parser"
+	help
+	  RS274/NGC g-code parser extracted from Grbl v1.1h. Parses and
+	  validates g-code blocks and drives the machine through application
+	  callbacks (struct gc_machine_ops).
+
+	  Grbl is licensed under the GNU GPL v3 or later. Firmware linking this
+	  library must be distributed under GPL-compatible terms.
+
+if GRBL_GCODE
+
+config GRBL_GCODE_LINE_BUFFER_SIZE
+	int "Line buffer size"
+	default 80
+	range 2 255
+	help
+	  Maximum length of a cleaned-up g-code line, including the
+	  terminating NUL (Grbl LINE_BUFFER_SIZE).
+
+config GRBL_GCODE_TOOL_LENGTH_OFFSET_AXIS
+	int "Tool length offset axis"
+	default 2
+	range 0 2
+	help
+	  Axis that G43.1 dynamic tool length offsets apply to: 0 = X, 1 = Y,
+	  2 = Z (Grbl TOOL_LENGTH_OFFSET_AXIS).
+
+config GRBL_GCODE_M7
+	bool "Support M7 mist coolant"
+	help
+	  Accept M7 in addition to M8 flood and M9 coolant off (Grbl ENABLE_M7).
+
+endif # GRBL_GCODE
