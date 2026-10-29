@@ -1,0 +1,21 @@
+# Copyright (c) 2021 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+#
+# This file is the application Kconfig entry point. All application Kconfig
+# options can be defined here or included via other application Kconfig files.
+# You can browse these options using the west targets menuconfig (terminal) or
+# guiconfig (GUI).
+
+# Freeze this application's Python sources rather than the port's example
+# manifest. Defined before the port's Kconfig so this default takes precedence.
+config MICROPY_FROZEN_MANIFEST
+	string
+	default "$(APP_DIR)/manifest.py"
+
+module = APP
+module-str = APP
+source "subsys/logging/Kconfig.template.log_config"
+
+# MicroPython port options (heap size, feature level, ...). This also sources
+# Kconfig.zephyr.
+rsource "../../modules/lib/micropython/ports/zephyr/Kconfig"

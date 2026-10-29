@@ -1,0 +1,43 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * STM32H5F5J-DK: TMC2209 step/dir stepper on the Arduino R3 header.
+ *
+ * Only header pins not already claimed by the board are used:
+ *   D2 (PA8)  STEP     D4 (PI12) DIR     D5 (PC12) EN
+ *   D7 (PF2)  MS1/M0   D9 (PB8)  MS2/M1
+ * (D0/D1 = UART7, D3/D6 = PWM, D8 = display enable, D10-D13 = SPI1/DAC,
+ * D14/D15 = I2C3.)
+ */
+
+#include <zephyr/dt-bindings/gpio/arduino-header-r3.h>
+
+/ {
+	tmc2209: tmc2209 {
+		compatible = "adi,tmc2209";
+		en-gpios = <&arduino_header ARDUINO_HEADER_R3_D5 GPIO_ACTIVE_HIGH>;
+		m0-gpios = <&arduino_header ARDUINO_HEADER_R3_D7 GPIO_ACTIVE_HIGH>;
+		m1-gpios = <&arduino_header ARDUINO_HEADER_R3_D9 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+
+	stepper0: motion-controller {
+		compatible = "zephyr,gpio-step-dir-stepper-ctrl";
+		step-gpios = <&arduino_header ARDUINO_HEADER_R3_D2 GPIO_ACTIVE_HIGH>;
+		dir-gpios = <&arduino_header ARDUINO_HEADER_R3_D4 GPIO_ACTIVE_HIGH>;
+		counter = <&counter1>;
+
+		// stepper-driver = <&tmc2209>;
+		status = "okay";
+	};
+};
+
+/* TIM2 (32-bit, otherwise unused on this board) times the step pulses. */
+&timers2 {
+	status = "okay";
+	st,prescaler = <1>;
+
+	counter1: counter {
+		status = "okay";
+	};
+};
