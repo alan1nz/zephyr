@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+
+[package]
+# zephyr-lang-rust requires the application crate to be named "rustapp".
+name = "rustapp"
+version = "1.0.0"
+edition = "2021"
+description = "Example stepper application in Rust"
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+zephyr = "0.1.0"
+zephyr-panic = "0.1.0"

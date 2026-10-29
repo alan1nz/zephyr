@@ -1,0 +1,3 @@
+/* Point the sample's stepper0 label at the board's X-axis stepper */
+stepper0: &stepper_x {
+};

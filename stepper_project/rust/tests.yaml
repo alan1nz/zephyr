@@ -1,0 +1,16 @@
+# This file is provided so that the application can be compiled using Twister,
+# the Zephyr testing tool. In this file, multiple combinations can be specified,
+# so that you can easily test all of them locally or in CI.
+sample:
+  description: Example application written in Rust
+  name: example-application-rust
+common:
+  build_only: true
+  integration_platforms:
+    - nucleo_l432kc
+    - stm32h5f5j_dk
+tests:
+  rust.default: {}
+  rust.debug:
+    extra_overlay_confs:
+      - debug.conf
