@@ -1,8 +1,0 @@
-/ {
-    my_led1: my-led {
-        compatible = "my-led";
-        gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
-        blink-period-ms = <50>;
-        status = "okay";
-    };
-};
