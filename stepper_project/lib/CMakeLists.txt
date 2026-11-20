@@ -2,3 +2,5 @@
 
 add_subdirectory_ifdef(CONFIG_CUSTOM custom)
 add_subdirectory_ifdef(CONFIG_UNITS units)
+add_subdirectory_ifdef(CONFIG_RTOS_THREAD thread)
+add_subdirectory(pc_parser)
