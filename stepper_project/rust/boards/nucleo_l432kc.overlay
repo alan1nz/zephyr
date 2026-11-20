@@ -1,10 +1,14 @@
 
 /{
-    my_led1: my-led {
-        compatible = "my-led";
-        gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
-        blink-period-ms = <50>;
-        status = "okay";
+    my-leds {
+        compatible = "my-leds";
+
+        /* LD3, the Nucleo's user LED */
+        status_led: status-led {
+            gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
+            role = "status";
+            blink-period-ms = <50>;
+        };
     };
 
     tmc2209: tmc2209 {
