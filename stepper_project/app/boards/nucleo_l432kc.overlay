@@ -1,12 +1,5 @@
 
 /{
-    my_led1: my-led {
-        compatible = "my-led";
-        gpios = <&gpiob 3 GPIO_ACTIVE_HIGH>;
-        blink-period-ms = <50>;
-        status = "okay";
-    };
-
     tmc2209: tmc2209 {
         compatible = "adi,tmc2209";
         en-gpios = <&gpiob 0 GPIO_ACTIVE_HIGH>;
