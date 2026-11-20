@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config RTOS_THREAD
+	bool "C++ thread wrappers"
+	# The C++ standard choice depends on CPP, so selecting CPP here would form a loop.
+	depends on STD_CPP20 || STD_CPP2A || STD_CPP23 || STD_CPP2B
+	select REQUIRES_FULL_LIBCPP
+	select TIMEOUT_64BIT
+	imply THREAD_NAME
+	help
+	  Declare Zephyr threads as a constexpr array of rtos::ThreadEntry
+	  (function, name, priority, stack size, optional period) and start
+	  them with rtos::start_threads. See include/app/lib/thread.hpp.
